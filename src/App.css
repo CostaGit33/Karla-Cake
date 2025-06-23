@@ -1,97 +1,175 @@
 @import "tailwindcss";
-@import "tw-animate-css";
+@import "tw-animate-css"; /* Importação do tw-animate-css */
 
-/* Variáveis globais para cores e estilos */
+/* Define um variante personalizado 'dark' para o Tailwind CSS */
+@custom-variant dark (&:is(.dark *));
+
+/* Definições de cores e variáveis globais para o tema claro */
 :root {
-  --primary-color: #ff689f;
-  --secondary-color: #f8d7e0;
-  --accent-color: #fff0f5;
-  --text-color: #333;
-  --white: #ffffff;
+  /* Variáveis de cores hexadecimais para sua paleta */
+  --primary-color: #ff689f; /* Rosa principal */
+  --secondary-color: #f8d7e0; /* Rosa secundário */
+  --accent-color: #fff0f5; /* Rosa acentuado/muito claro */
+  --text-color: #333; /* Cor de texto padrão */
+  --white: #ffffff; /* Branco */
 
+  /* Cores de feedback/status */
   --success-color: #28a745;
   --warning-color: #ffc107;
   --info-color: #17a2b8;
   --danger-color: #dc3545;
 
+  /* Cores adicionais para componentes específicos */
   --feedback-bg: #ffe0e6;
   --feedback-text: #a80039;
   --button-primary-bg: #ff689f;
   --button-secondary-bg: #f8d7e0;
   --button-hover-bg: #e5588f;
 
-  --gradient-light-start: #fdf2f8;
-  --gradient-light-mid: #fce7f3;
-  --gradient-light-end: #f9a8d4;
-  --gradient-dark-start: #ec4899;
-  --gradient-dark-end: #be185d;
+  /* Variáveis específicas para os gradientes e sombras personalizados */
+  --gradient-light-start: #fdf2f8; /* Cor inicial do gradiente claro */
+  --gradient-light-mid: #fce7f3;   /* Cor do meio do gradiente claro */
+  --gradient-light-end: #f9a8d4;   /* Cor final do gradiente claro */
+  --gradient-dark-start: #ec4899;  /* Cor inicial do gradiente de texto/sombra */
+  --gradient-dark-end: #be185d;    /* Cor final do gradiente de texto */
 
+  /* Variáveis de raio de borda, sombra e transição */
   --border-radius: 10px;
   --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   --transition: all 0.3s ease;
 
-  --radius: 0.75rem;
-  --background: var(--white);
-  --foreground: var(--text-color);
-  --card: var(--white);
-  --card-foreground: var(--text-color);
-  --popover: var(--white);
-  --popover-foreground: var(--text-color);
+  /* Variáveis de cores para o tema (mapeadas para suas hexadecimais) */
+  --radius: 0.75rem; /* Raio de borda padrão para componentes */
 
-  --primary: var(--primary-color);
-  --primary-foreground: var(--white);
+  --background: var(--white); /* Fundo branco */
+  --foreground: var(--text-color); /* Texto principal */
 
-  --secondary: var(--secondary-color);
-  --secondary-foreground: var(--text-color);
+  --card: var(--white); /* Fundo de cards */
+  --card-foreground: var(--text-color); /* Texto em cards */
 
-  --muted: var(--accent-color);
-  --muted-foreground: #6b7280;
+  --popover: var(--white); /* Fundo de popovers */
+  --popover-foreground: var(--text-color); /* Texto em popovers */
 
-  --accent: var(--accent-color);
-  --accent-foreground: var(--text-color);
+  --primary: var(--primary-color); /* Rosa principal para o tema */
+  --primary-foreground: var(--white); /* Texto branco sobre o primário */
 
-  --destructive: var(--danger-color);
-  --border: #e5e7eb;
-  --input: #f3f4f6;
-  --ring: var(--primary-color);
+  --secondary: var(--secondary-color); /* Rosa secundário para o tema */
+  --secondary-foreground: var(--text-color); /* Texto sobre o secundário */
+
+  --muted: var(--accent-color); /* Rosa muito claro para elementos muted */
+  --muted-foreground: #6b7280; /* Um cinza para texto muted */
+
+  --accent: var(--accent-color); /* Rosa acentuado para o tema */
+  --accent-foreground: var(--text-color); /* Texto sobre o acentuado */
+
+  --destructive: var(--danger-color); /* Cor de perigo */
+  --destructive-foreground: var(--white); /* Cor de texto para elementos destrutivos no tema claro */
+
+  --border: #e5e7eb; /* Um cinza claro para bordas */
+  --input: #f3f4f6; /* Um cinza muito claro para inputs */
+  --ring: var(--primary-color); /* Anel de foco com a cor primária */
+
+  /* Cores para gráficos e sidebar (mantidas como OKLCH se não houver mapeamento direto) */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Tema escuro */
 .dark {
-  --background: #1f1f1f;
-  --foreground: #f9fafb;
-  --card: #2a2a2a;
-  --card-foreground: #f9fafb;
-  --popover: #2a2a2a;
-  --popover-foreground: #f9fafb;
-  --primary: #ec4899;
-  --primary-foreground: #1f1f1f;
-  --secondary: #9333ea;
-  --secondary-foreground: #f9fafb;
-  --muted: #374151;
-  --muted-foreground: #9ca3af;
-  --accent: #7c3aed;
-  --accent-foreground: #f9fafb;
-  --destructive: #dc2626;
-  --border: #374151;
-  --input: #1f2937;
-  --ring: #ec4899;
+  --background: #1f1f1f; /* Fundo escuro */
+  --foreground: #f9fafb; /* Texto claro */
+
+  --card: #2a2a2a; /* Cards escuros */
+  --card-foreground: #f9fafb; /* Texto em cards claros */
+
+  --popover: #2a2a2a; /* Popovers escuros */
+  --popover-foreground: #f9fafb; /* Texto em popovers claros */
+
+  --primary: #ec4899; /* Rosa principal mais escuro para o tema escuro */
+  --primary-foreground: #1f1f1f; /* Texto escuro sobre o primário */
+
+  --secondary: #9333ea; /* Roxo para secundário no tema escuro */
+  --secondary-foreground: #f9fafb; /* Texto claro sobre o secundário */
+
+  --muted: #374151; /* Cinza escuro para elementos muted */
+  --muted-foreground: #9ca3af; /* Cinza claro para texto muted */
+
+  --accent: #7c3aed; /* Roxo acentuado para o tema escuro */
+  --accent-foreground: #f9fafb; /* Texto claro sobre o acentuado */
+
+  --destructive: #dc2626; /* Vermelho de perigo */
+  --destructive-foreground: #f9fafb; /* Cor de texto para elementos destrutivos no tema escuro */
+
+  --border: #374151; /* Bordas escuras */
+  --input: #1f2937; /* Inputs escuros */
+  --ring: #ec4899; /* Anel de foco com a cor primária */
+
+  /* Cores para gráficos e sidebar no tema escuro (mantidas como OKLCH) */
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
   * {
-    border-color: var(--border);
-    /* Fallback for browsers that do not support color-mix */
-    outline-color: #f7b3d1;
+    /* Remova ou comente as linhas abaixo */
+    /* border-color: var(--border); */
+    /* outline-width: 2px; */
+    /* outline-style: solid; */
     /* outline-color: color-mix(in srgb, var(--ring) 50%, transparent); */
   }
-
   body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
+@layer components {
+  .button {
+    @apply px-4 py-2 rounded-lg text-white font-semibold;
+    background-color: var(--button-primary-bg);
+    transition: background-color var(--transition);
+  }
 
+  .button:hover {
+    background-color: var(--button-hover-bg);
+  }
+
+  .card {
+    @apply p-6 rounded-lg shadow-lg;
+    background-color: var(--card);
+    color: var(--card-foreground);
+  }
+
+  .input {
+    @apply p-2 rounded-lg border border-gray-300;
+    background-color: var(--input);
+    color: var(--foreground);
+  }
+}
+
+/* Estilos personalizados para confeitaria usando as variáveis */
 .confeitaria-gradient {
   background: linear-gradient(135deg, var(--gradient-light-start) 0%, var(--gradient-light-mid) 50%, var(--gradient-light-end) 100%);
 }
@@ -104,21 +182,12 @@
 }
 
 .hover-lift {
+  /* Usa a variável --transition para transições suaves */
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .hover-lift:hover {
   transform: translateY(-4px);
+  /* Usa a cor do gradiente de texto para a sombra, com opacidade */
   box-shadow: 0 10px 25px color-mix(in srgb, var(--gradient-dark-start) 15%, transparent);
-}
-
-.btn {
-  background-color: #ec4899; /* Tailwind bg-pink-500 */
-  color: #ffffff;            /* Tailwind text-white */
-  font-weight: bold;         /* Tailwind font-bold */
-  padding-top: 0.5rem;       /* Tailwind py-2 */
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;        /* Tailwind px-4 */
-  padding-right: 1rem;
-  border-radius: 0.25rem;    /* Tailwind rounded */
 }
