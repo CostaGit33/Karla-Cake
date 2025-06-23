@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import * as z from 'zod'; // Importa tudo de zod
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,16 +9,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Cake, MessageCircle, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Cake, MessageCircle } from 'lucide-react'; // Removidos ImageIcon e Loader2
 
 // --- DEFINIÇÃO DAS OPÇÕES DE PRODUTO E PREÇOS ---
+// Ajustado para usar os valores do SelectItem do OrderCakes.jsx e os preços do adicionar.js
 const tamanhoOptions = [
-  { label: "10cm - R$75,00 (8 fatias)", value: "10cm", price: 75 },
-  { label: "12cm - R$100,00 (10 fatias)", value: "12cm", price: 100 },
-  { label: "15cm - R$120,00 (12 fatias)", value: "15cm", price: 120 },
-  { label: "18cm - R$150,00 (15 fatias)", value: "18cm", price: 150 },
-  { label: "20cm - R$185,00 (20 fatias)", value: "20cm", price: 185 },
-  { label: "25cm - R$210,00 (25 fatias)", value: "25cm", price: 210 }
+  { label: "Pequeno (15cm - 8 fatias)", value: "pequeno", price: 75 },
+  { label: "Médio (20cm - 12 fatias)", value: "medio", price: 100 },
+  { label: "Grande (25cm - 16 fatias)", value: "grande", price: 120 },
+  { label: "Extra Grande (30cm - 20 fatias)", value: "extra-grande", price: 150 }
 ];
 
 const saborOptions = [
@@ -73,7 +72,7 @@ const formSchema = z.object({
   recheio: z.string().min(1, "Recheio é obrigatório."),
   cobertura: z.string().min(1, "Cobertura é obrigatória."),
   tamanho: z.string().min(1, "Tamanho é obrigatório."),
-  adicional: z.string().optional().or(z.literal('')), // Adicional agora é um campo do formulário
+  adicional: z.string().optional().or(z.literal('')),
   decoracao: z.string().optional().or(z.literal('')),
   observacoes: z.string().optional().or(z.literal('')),
 });
@@ -98,7 +97,7 @@ const OrderCakes = () => {
       recheio: '',
       cobertura: '',
       tamanho: '',
-      adicional: '', // Adicional agora faz parte dos defaultValues
+      adicional: '',
       decoracao: '',
       observacoes: ''
     }
@@ -111,12 +110,6 @@ const OrderCakes = () => {
   const [valorBolo, setValorBolo] = useState(0);
   const [valorAdicional, setValorAdicional] = useState(0);
   const [valorTotal, setValorTotal] = useState(0);
-
-  // --- NOVOS ESTADOS PARA A IA ---
-  const [generatedImageUrl, setGeneratedImageUrl] = useState(null);
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
-  const [imageError, setImageError] = useState(null);
-  // --- FIM NOVOS ESTADOS ---
 
   // Efeito para recalcular preços sempre que tamanho ou adicional mudarem
   useEffect(() => {
@@ -133,87 +126,6 @@ const OrderCakes = () => {
   }, [watchedTamanho, watchedAdicional]);
 
 
-  // --- FUNÇÃO: CONSTRÓI O PROMPT PARA A IA ---
-  const buildPrompt = (data) => {
-    let prompt = `Um bolo de aniversário realista e de alta qualidade.`;
-
-    if (data.sabor) prompt += ` Sabor: ${data.sabor}.`;
-    if (data.recheio) prompt += ` Recheio: ${data.recheio}.`;
-    if (data.cobertura) prompt += ` Cobertura: ${data.cobertura}.`;
-
-    // Mapear tamanho para andares ou descrição mais detalhada para a IA
-    let andares = '';
-    switch (data.tamanho) {
-      case '10cm': andares = '1 andar, pequeno'; break;
-      case '12cm': andares = '1 andar, pequeno'; break;
-      case '15cm': andares = '1 andar, médio'; break;
-      case '18cm': andares = '1 andar, médio'; break;
-      case '20cm': andares = '1 ou 2 andares, grande'; break;
-      case '25cm': andares = '2 ou 3 andares, grande'; break;
-      default: andares = '1 andar'; // Padrão
-    }
-    if (andares) prompt += ` Tamanho: ${andares}.`;
-
-    if (data.decoracao) prompt += ` Decoração: ${data.decoracao}.`;
-    if (data.adicional) prompt += ` Adicional: ${adicionalOptions.find(opt => opt.value === data.adicional)?.label}.`;
-    if (data.observacoes) prompt += ` Observações: ${data.observacoes}.`;
-
-    // Termos para melhorar a qualidade da imagem gerada
-    prompt += ` Renderização fotorrealista, iluminação de estúdio, fundo branco simples, sem texto na imagem.`;
-
-    return prompt;
-  };
-  // --- FIM NOVA FUNÇÃO ---
-
-  // --- NOVA FUNÇÃO: CHAMA A API DA IA ---
-  const generateCakeImage = async () => {
-    setIsLoadingImage(true);
-    setImageError(null);
-    setGeneratedImageUrl(null); // Limpa a imagem anterior
-
-    const currentFormData = watch(); // Pega os dados atuais do formulário
-    const prompt = buildPrompt(currentFormData);
-    console.log("Prompt gerado para IA:", prompt);
-
-    try {
-      // ATENÇÃO: ESTE É UM EXEMPLO DE CHAMADA À API DA OPENAI (DALL-E).
-      // VOCÊ DEVE SUBSTITUIR PELA API DA IA QUE ESCOLHER.
-      // E, MAIS IMPORTANTE, NUNCA EXPOR SUA CHAVE API DIRETAMENTE NO FRONTEND.
-      // O IDEAL É FAZER ESSA CHAMADA ATRAVÉS DE UM BACKEND SEU.
-
-      const response = await fetch('https://api.openai.com/v1/images/generations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Substitua 'SUA_CHAVE_API_OPENAI' pela sua chave real.
-          // Lembre-se: ISSO É INSEGURO PARA PRODUÇÃO. Use um backend!
-          'Authorization': `Bearer SUA_CHAVE_API_OPENAI`,
-        },
-        body: JSON.stringify({
-          prompt: prompt,
-          n: 1, // Gerar 1 imagem
-          size: "1024x1024", // Tamanho da imagem
-        } ),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Erro da API da IA:", errorData);
-        throw new Error(errorData.error.message || 'Falha ao gerar imagem. Verifique os detalhes do bolo.');
-      }
-
-      const data = await response.json();
-      setGeneratedImageUrl(data.data[0].url); // A URL da imagem gerada
-    } catch (err) {
-      console.error("Erro ao gerar imagem:", err);
-      setImageError("Não foi possível gerar o pré-molde. Tente novamente ou ajuste os detalhes.");
-    } finally {
-      setIsLoadingImage(false);
-    }
-  };
-  // --- FIM NOVA FUNÇÃO ---
-
-
   // Função chamada ao submeter o formulário (após validação bem-sucedida)
   const onSubmit = (data) => {
     const message = `🧁 *PEDIDO DE BOLO - KARLA CAKE*
@@ -224,10 +136,10 @@ const OrderCakes = () => {
 📅 *Data de Entrega:* ${data.dataEntrega}
 
 🎂 *Detalhes do Bolo:*
-• Sabor: ${saborOptions.find(opt => opt.value === data.sabor)?.label}
-• Recheio: ${recheioOptions.find(opt => opt.value === data.recheio)?.label}
-• Cobertura: ${coberturaOptions.find(opt => opt.value === data.cobertura)?.label}
-• Tamanho: ${tamanhoOptions.find(opt => opt.value === data.tamanho)?.label}
+• Sabor: ${saborOptions.find(opt => opt.value === data.sabor)?.label || 'Não especificado'}
+• Recheio: ${recheioOptions.find(opt => opt.value === data.recheio)?.label || 'Não especificado'}
+• Cobertura: ${coberturaOptions.find(opt => opt.value === data.cobertura)?.label || 'Não especificado'}
+• Tamanho: ${tamanhoOptions.find(opt => opt.value === data.tamanho)?.label || 'Não especificado'}
 • Adicional: ${data.adicional ? adicionalOptions.find(opt => opt.value === data.adicional)?.label : 'Nenhum'}
 • Decoração: ${data.decoracao || 'Não especificada'}
 
@@ -237,8 +149,6 @@ const OrderCakes = () => {
 • *Valor Total Estimado:* ${formatCurrency(valorTotal)}
 
 📝 *Observações:* ${data.observacoes || 'Nenhuma'}
-
-${generatedImageUrl ? `🖼️ *Pré-molde gerado por IA:* ${generatedImageUrl}` : ''}
 
 Aguardo retorno para confirmar o pedido e valor. Obrigado!`;
 
@@ -465,53 +375,6 @@ Aguardo retorno para confirmar o pedido e valor. Obrigado!`;
                 </p>
               </div>
               {/* --- FIM SEÇÃO DE RESUMO DE PREÇOS --- */}
-
-              {/* --- SEÇÃO: PRÉ-MOLDE COM IA --- */}
-              <div className="space-y-4 border-t pt-6 mt-6">
-                <h3 className="text-lg font-semibold text-gray-800">Pré-Molde do Bolo (IA)</h3>
-                <p className="text-sm text-gray-600">
-                  Gere uma pré-visualização do seu bolo com base nas características escolhidas.
-                </p>
-                <Button 
-                  type="button" // Importante: type="button" para não submeter o formulário
-                  onClick={generateCakeImage} 
-                  disabled={isLoadingImage} 
-                  className="w-full bg-purple-600 hover:bg-purple-700"
-                  size="lg"
-                >
-                  {isLoadingImage ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Gerando Imagem...
-                    </>
-                  ) : (
-                    <>
-                      <ImageIcon className="w-5 h-5 mr-2" />
-                      Gerar Pré-Molde
-                    </>
-                  )}
-                </Button>
-
-                {imageError && (
-                  <p className="text-red-500 text-center mt-4">{imageError}</p>
-                )}
-
-                {generatedImageUrl && (
-                  <div className="mt-6 text-center">
-                    <h4 className="text-md font-semibold mb-2">Seu Pré-Molde:</h4>
-                    <img 
-                      src={generatedImageUrl} 
-                      alt="Pré-molde do bolo gerado por IA" 
-                      className="max-w-full h-auto mx-auto rounded-lg shadow-lg border border-gray-200" 
-                      style={{ maxWidth: '400px' }} // Limita o tamanho da imagem na tela
-                    />
-                    <p className="text-sm text-gray-500 mt-2">
-                      Esta é uma sugestão visual gerada por IA. O bolo final pode ter variações.
-                    </p>
-                  </div>
-                )}
-              </div>
-              {/* --- FIM SEÇÃO --- */}
 
               <Button 
                 type="submit" 
