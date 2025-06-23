@@ -18,7 +18,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contato</h3>
             <div className="space-y-2">
-              <p className="text-gray-300">📱 WhatsApp: (73) 99999-9999</p>
+              <p className="text-gray-300">📱 WhatsApp: (73) 99811-8856</p>
               <p className="text-gray-300">📧 Email: contato@karlacake.com</p>
               <p className="text-gray-300">📍 Eunápolis, BA</p>
             </div>
@@ -28,7 +28,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
             <div className="flex space-x-4">
               <a 
-                href="https://wa.me/5573999999999" 
+                href="https://wa.me/5573998118856" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-green-400 hover:text-green-300 transition-colors"
@@ -37,7 +37,7 @@ const Footer = () => {
                 <span>WhatsApp</span>
               </a>
               <a 
-                href="https://instagram.com/karlacake" 
+                href="https://instagram.com/karla.cake_" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 text-pink-400 hover:text-pink-300 transition-colors"

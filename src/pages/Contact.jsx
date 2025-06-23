@@ -28,13 +28,13 @@ const Contact = () => {
               </p>
               <Button asChild className="w-full bg-green-600 hover:bg-green-700">
                 <a 
-                  href="https://wa.me/5573999999999?text=Olá! Gostaria de fazer um pedido na Karla Cake." 
+                  href="https://wa.me/5573998118856?text=Olá! Gostaria de fazer um pedido na Karla Cake." 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center justify-center space-x-2"
                 >
                   <MessageCircle className="w-5 h-5" />
-                  <span>(73) 99999-9999</span>
+                  <span>(73) 99811-8856</span>
                 </a>
               </Button>
             </CardContent>
