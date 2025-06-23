@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css"; /* Importação do tw-animate-css */
 
+/* Define um variante personalizado 'dark' para o Tailwind CSS */
+@custom-variant dark (&:is(.dark *));
+
 /* Definições de cores e variáveis globais para o tema claro */
 :root {
   /* Variáveis de cores hexadecimais para sua paleta */
@@ -93,7 +96,7 @@
   --popover: #2a2a2a; /* Popovers escuros */
   --popover-foreground: #f9fafb; /* Texto em popovers claros */
 
-  --primary: #ffffff; /* Rosa principal mais escuro para o tema escuro */
+  --primary: #ec4899; /* Rosa principal mais escuro para o tema escuro */
   --primary-foreground: #1f1f1f; /* Texto escuro sobre o primário */
 
   --secondary: #9333ea; /* Roxo para secundário no tema escuro */
@@ -129,19 +132,13 @@
 }
 
 /* Camada base do Tailwind CSS */
-/* Camada base do Tailwind CSS */
 @layer base {
   * {
-    /* Aplica a cor da borda definida pela variável --border (já é sutil) */
-    border-color: var(--border);
-    /* Define a largura do contorno para 1px (mais fino) */
-    outline-width: 1px;
-    /* Define o estilo do contorno */
-    outline-style: solid;
-    /* Define a cor do contorno usando a variável --ring com 10% de opacidade (muito sutil) */
-    outline-color: color-mix(in srgb, var(--ring) 10%, transparent);
-    /* Se 10% ainda for muito, tente 5%:
-    outline-color: color-mix(in srgb, var(--ring) 5%, transparent); */
+    /* REMOVA OU COMENTE TODAS AS LINHAS ABAIXO SE VOCÊ NÃO QUER AS BORDAS E CONTORNOS EM TODOS OS ELEMENTOS */
+    /* border-color: var(--border); */
+    /* outline-width: 2px; */
+    /* outline-style: solid; */
+    /* outline-color: color-mix(in srgb, var(--ring) 100%, transparent); */
   }
 
   body {
