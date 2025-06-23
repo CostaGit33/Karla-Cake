@@ -7,8 +7,8 @@
 /* Definições de cores e variáveis globais para o tema claro */
 :root {
   /* Variáveis de cores hexadecimais para sua paleta */
-  --primary-color: #e00052; /* Rosa principal */
-  --secondary-color: #fc89a7; /* Rosa secundário */
+  --primary-color: #ff689f; /* Rosa principal */
+  --secondary-color: #f8d7e0; /* Rosa secundário */
   --accent-color: #fff0f5; /* Rosa acentuado/muito claro */
   --text-color: #333; /* Cor de texto padrão */
   --white: #ffffff; /* Branco */
