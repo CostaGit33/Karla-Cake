@@ -80,7 +80,9 @@
 @layer base {
   * {
     border-color: var(--border);
-    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+    /* Fallback for browsers that do not support color-mix */
+    outline-color: #f7b3d1;
+    /* outline-color: color-mix(in srgb, var(--ring) 50%, transparent); */
   }
 
   body {
@@ -111,5 +113,12 @@
 }
 
 .btn {
-  @apply bg-pink-500 text-white font-bold py-2 px-4 rounded;
+  background-color: #ec4899; /* Tailwind bg-pink-500 */
+  color: #ffffff;            /* Tailwind text-white */
+  font-weight: bold;         /* Tailwind font-bold */
+  padding-top: 0.5rem;       /* Tailwind py-2 */
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;        /* Tailwind px-4 */
+  padding-right: 1rem;
+  border-radius: 0.25rem;    /* Tailwind rounded */
 }
