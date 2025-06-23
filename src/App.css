@@ -1,9 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css"; /* Importação do tw-animate-css */
 
-/* Define um variante personalizado 'dark' para o Tailwind CSS */
-@custom-variant dark (&:is(.dark *));
-
 /* Definições de cores e variáveis globais para o tema claro */
 :root {
   /* Variáveis de cores hexadecimais para sua paleta */
@@ -96,7 +93,7 @@
   --popover: #2a2a2a; /* Popovers escuros */
   --popover-foreground: #f9fafb; /* Texto em popovers claros */
 
-  --primary: #ec4899; /* Rosa principal mais escuro para o tema escuro */
+  --primary: #ffffff; /* Rosa principal mais escuro para o tema escuro */
   --primary-foreground: #1f1f1f; /* Texto escuro sobre o primário */
 
   --secondary: #9333ea; /* Roxo para secundário no tema escuro */
@@ -131,43 +128,31 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Camada base do Tailwind CSS */
+/* Camada base do Tailwind CSS */
 @layer base {
   * {
-    /* Remova ou comente as linhas abaixo */
-    /* border-color: var(--border); */
-    /* outline-width: 2px; */
-    /* outline-style: solid; */
-    /* outline-color: color-mix(in srgb, var(--ring) 50%, transparent); */
+    /* Aplica a cor da borda definida pela variável --border (já é sutil) */
+    border-color: var(--border);
+    /* Define a largura do contorno para 1px (mais fino) */
+    outline-width: 1px;
+    /* Define o estilo do contorno */
+    outline-style: solid;
+    /* Define a cor do contorno usando a variável --ring com 10% de opacidade (muito sutil) */
+    outline-color: color-mix(in srgb, var(--ring) 10%, transparent);
+    /* Se 10% ainda for muito, tente 5%:
+    outline-color: color-mix(in srgb, var(--ring) 5%, transparent); */
   }
+
   body {
+    /* Aplica as cores de fundo e texto definidas pelas variáveis do tema */
     background-color: var(--background);
     color: var(--foreground);
+    /* Define a fonte padrão para o corpo */
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
-@layer components {
-  .button {
-    @apply px-4 py-2 rounded-lg text-white font-semibold;
-    background-color: var(--button-primary-bg);
-    transition: background-color var(--transition);
-  }
 
-  .button:hover {
-    background-color: var(--button-hover-bg);
-  }
-
-  .card {
-    @apply p-6 rounded-lg shadow-lg;
-    background-color: var(--card);
-    color: var(--card-foreground);
-  }
-
-  .input {
-    @apply p-2 rounded-lg border border-gray-300;
-    background-color: var(--input);
-    color: var(--foreground);
-  }
-}
 
 /* Estilos personalizados para confeitaria usando as variáveis */
 .confeitaria-gradient {
