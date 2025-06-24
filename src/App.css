@@ -1,75 +1,68 @@
 @import "tailwindcss";
-@import "tw-animate-css"; /* Importação do tw-animate-css */
+@import "tw-animate-css";
 
-/* Define um variante personalizado 'dark' para o Tailwind CSS */
+/* Define uma variante personalizada 'dark' para Tailwind */
 @custom-variant dark (&:is(.dark *));
 
-/* Definições de cores e variáveis globais para o tema claro */
+/* ===== Tema Claro ===== */
 :root {
-  /* Variáveis de cores hexadecimais para sua paleta */
-  --primary-color: #ff689f; /* Rosa principal */
-  --secondary-color: #f8d7e0; /* Rosa secundário */
-  --accent-color: #fff0f5; /* Rosa acentuado/muito claro */
-  --text-color: #333; /* Cor de texto padrão */
-  --white: #ffffff; /* Branco */
+  --primary-color: #ff689f;
+  --secondary-color: #f8d7e0;
+  --accent-color: #fff0f5;
+  --text-color: #333;
+  --white: #ffffff;
 
-  /* Cores de feedback/status */
   --success-color: #28a745;
   --warning-color: #ffc107;
   --info-color: #17a2b8;
   --danger-color: #dc3545;
 
-  /* Cores adicionais para componentes específicos */
   --feedback-bg: #ffe0e6;
   --feedback-text: #a80039;
   --button-primary-bg: #ff689f;
   --button-secondary-bg: #f8d7e0;
   --button-hover-bg: #e5588f;
 
-  /* Variáveis específicas para os gradientes e sombras personalizados */
-  --gradient-light-start: #fdf2f8; /* Cor inicial do gradiente claro */
-  --gradient-light-mid: #fce7f3;   /* Cor do meio do gradiente claro */
-  --gradient-light-end: #f9a8d4;   /* Cor final do gradiente claro */
-  --gradient-dark-start: #ec4899;  /* Cor inicial do gradiente de texto/sombra */
-  --gradient-dark-end: #be185d;    /* Cor final do gradiente de texto */
+  --gradient-light-start: #fdf2f8;
+  --gradient-light-mid: #fce7f3;
+  --gradient-light-end: #f9a8d4;
+  --gradient-dark-start: #ec4899;
+  --gradient-dark-end: #be185d;
 
-  /* Variáveis de raio de borda, sombra e transição */
   --border-radius: 10px;
   --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   --transition: all 0.3s ease;
 
-  /* Variáveis de cores para o tema (mapeadas para suas hexadecimais) */
-  --radius: 0.75rem; /* Raio de borda padrão para componentes */
+  --radius: 0.75rem;
 
-  --background: var(--white); /* Fundo branco */
-  --foreground: var(--text-color); /* Texto principal */
+  --background: var(--white);
+  --foreground: var(--text-color);
 
-  --card: var(--white); /* Fundo de cards */
-  --card-foreground: var(--text-color); /* Texto em cards */
+  --card: var(--white);
+  --card-foreground: var(--text-color);
 
-  --popover: var(--white); /* Fundo de popovers */
-  --popover-foreground: var(--text-color); /* Texto em popovers */
+  --popover: var(--white);
+  --popover-foreground: var(--text-color);
 
-  --primary: var(--primary-color); /* Rosa principal para o tema */
-  --primary-foreground: var(--white); /* Texto branco sobre o primário */
+  --primary: var(--primary-color);
+  --primary-foreground: var(--white);
 
-  --secondary: var(--secondary-color); /* Rosa secundário para o tema */
-  --secondary-foreground: var(--text-color); /* Texto sobre o secundário */
+  --secondary: var(--secondary-color);
+  --secondary-foreground: var(--text-color);
 
-  --muted: var(--accent-color); /* Rosa muito claro para elementos muted */
-  --muted-foreground: #6b7280; /* Um cinza para texto muted */
+  --muted: var(--accent-color);
+  --muted-foreground: #6b7280;
 
-  --accent: var(--accent-color); /* Rosa acentuado para o tema */
-  --accent-foreground: var(--text-color); /* Texto sobre o acentuado */
+  --accent: var(--accent-color);
+  --accent-foreground: var(--text-color);
 
-  --destructive: var(--danger-color); /* Cor de perigo */
-  --destructive-foreground: var(--white); /* Cor de texto para elementos destrutivos no tema claro */
+  --destructive: var(--danger-color);
+  --destructive-foreground: var(--white);
 
-  --border: #e5e7eb; /* Um cinza claro para bordas */
-  --input: #f3f4f6; /* Um cinza muito claro para inputs */
-  --ring: var(--primary-color); /* Anel de foco com a cor primária */
+  --border: #e5e7eb;
+  --input: #f3f4f6;
+  --ring: var(--primary-color);
 
-  /* Cores para gráficos e sidebar (mantidas como OKLCH se não houver mapeamento direto) */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -85,37 +78,36 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* Tema escuro */
+/* ===== Tema Escuro ===== */
 .dark {
-  --background: #1f1f1f; /* Fundo escuro */
-  --foreground: #f9fafb; /* Texto claro */
+  --background: #1f1f1f;
+  --foreground: #f9fafb;
 
-  --card: #2a2a2a; /* Cards escuros */
-  --card-foreground: #f9fafb; /* Texto em cards claros */
+  --card: #2a2a2a;
+  --card-foreground: #f9fafb;
 
-  --popover: #2a2a2a; /* Popovers escuros */
-  --popover-foreground: #f9fafb; /* Texto em popovers claros */
+  --popover: #2a2a2a;
+  --popover-foreground: #f9fafb;
 
-  --primary: #ec4899; /* Rosa principal mais escuro para o tema escuro */
-  --primary-foreground: #1f1f1f; /* Texto escuro sobre o primário */
+  --primary: #ec4899;
+  --primary-foreground: #1f1f1f;
 
-  --secondary: #9333ea; /* Roxo para secundário no tema escuro */
-  --secondary-foreground: #f9fafb; /* Texto claro sobre o secundário */
+  --secondary: #9333ea;
+  --secondary-foreground: #f9fafb;
 
-  --muted: #374151; /* Cinza escuro para elementos muted */
-  --muted-foreground: #9ca3af; /* Cinza claro para texto muted */
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
 
-  --accent: #7c3aed; /* Roxo acentuado para o tema escuro */
-  --accent-foreground: #f9fafb; /* Texto claro sobre o acentuado */
+  --accent: #7c3aed;
+  --accent-foreground: #f9fafb;
 
-  --destructive: #dc2626; /* Vermelho de perigo */
-  --destructive-foreground: #f9fafb; /* Cor de texto para elementos destrutivos no tema escuro */
+  --destructive: #dc2626;
+  --destructive-foreground: #f9fafb;
 
-  --border: #374151; /* Bordas escuras */
-  --input: #1f2937; /* Inputs escuros */
-  --ring: #ec4899; /* Anel de foco com a cor primária */
+  --border: #374151;
+  --input: #1f2937;
+  --ring: #ec4899;
 
-  /* Cores para gráficos e sidebar no tema escuro (mantidas como OKLCH) */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -131,27 +123,16 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/* Camada base do Tailwind CSS */
+/* ===== Base ===== */
 @layer base {
-  * {
-    /* REMOVA OU COMENTE TODAS AS LINHAS ABAIXO SE VOCÊ NÃO QUER AS BORDAS E CONTORNOS EM TODOS OS ELEMENTOS */
-    /* border-color: var(--border); */
-    /* outline-width: 2px; */
-    /* outline-style: solid; */
-    /* outline-color: color-mix(in srgb, var(--ring) 100%, transparent); */
-  }
-
   body {
-    /* Aplica as cores de fundo e texto definidas pelas variáveis do tema */
     background-color: var(--background);
     color: var(--foreground);
-    /* Define a fonte padrão para o corpo */
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
 
-
-/* Estilos personalizados para confeitaria usando as variáveis */
+/* ===== Gradientes ===== */
 .confeitaria-gradient {
   background: linear-gradient(135deg, var(--gradient-light-start) 0%, var(--gradient-light-mid) 50%, var(--gradient-light-end) 100%);
 }
@@ -163,13 +144,17 @@
   background-clip: text;
 }
 
+/* ===== Hover lift effect ===== */
 .hover-lift {
-  /* Usa a variável --transition para transições suaves */
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .hover-lift:hover {
   transform: translateY(-4px);
-  /* Usa a cor do gradiente de texto para a sombra, com opacidade */
   box-shadow: 0 10px 25px color-mix(in srgb, var(--gradient-dark-start) 15%, transparent);
+}
+
+/* ===== Estilo Global para TODOS os SelectItem do Projeto ===== */
+[data-slot='select-item'] {
+  @apply py-2 px-4 text-sm font-semibold rounded-md transition-all hover:bg-pink-100 hover:text-pink-800;
 }

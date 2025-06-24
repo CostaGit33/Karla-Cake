@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -7,313 +7,227 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Heart, MessageCircle, AlertCircle } from 'lucide-react';
 
+const eventoOptions = [
+  "Casamento",
+  "Noivado",
+  "Aniversário",
+  "Batizado",
+  "Formatura",
+  "Outro"
+];
+
+const andaresOptions = [
+  "2 Andares",
+  "3 Andares",
+  "4 Andares",
+  "5 ou mais Andares"
+];
+
 const OrderTieredCakes = () => {
   const [formData, setFormData] = useState({
-    nome: '',
+    nomeCliente: '',
     telefone: '',
-    email: '',
     dataEntrega: '',
     tipoEvento: '',
+    numeroConvidados: '',
     numeroAndares: '',
     sabores: '',
     recheios: '',
     coberturas: '',
     decoracao: '',
     cores: '',
-    numeroConvidados: '',
     observacoes: ''
   });
+
+  const [formErrors, setFormErrors] = useState({});
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
+    setFormErrors(prev => ({
+      ...prev,
+      [field]: undefined
+    }));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.nomeCliente) errors.nomeCliente = "Nome é obrigatório.";
+    if (!formData.telefone || formData.telefone.length < 10) errors.telefone = "Telefone inválido.";
+    if (!formData.dataEntrega) errors.dataEntrega = "Data de entrega obrigatória.";
+    if (!formData.tipoEvento) errors.tipoEvento = "Tipo de evento obrigatório.";
+    if (!formData.numeroConvidados) errors.numeroConvidados = "Número de convidados obrigatório.";
+    if (!formData.numeroAndares) errors.numeroAndares = "Número de andares obrigatório.";
+    if (!formData.sabores) errors.sabores = "Sabores obrigatórios.";
+    if (!formData.recheios) errors.recheios = "Recheios obrigatórios.";
+    if (!formData.coberturas) errors.coberturas = "Coberturas obrigatórias.";
+    if (!formData.decoracao) errors.decoracao = "Decoração obrigatória.";
+    if (!formData.cores) errors.cores = "Cores obrigatórias.";
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    const message = `💒 *PEDIDO DE BOLO DE ANDAR - KARLA CAKE*
+    if (!validateForm()) return;
 
-👤 *Cliente:* ${formData.nome}
+    const message = `🎂 *PEDIDO DE BOLO DE ANDAR - KARLA CAKE*
+
+👤 *Cliente:* ${formData.nomeCliente}
 📱 *Telefone:* ${formData.telefone}
-📧 *E-mail:* ${formData.email}
 📅 *Data de Entrega:* ${formData.dataEntrega}
 
-🎉 *Detalhes do Evento:*
-• Tipo de Evento: ${formData.tipoEvento}
-• Número de Convidados: ${formData.numeroConvidados}
+🎉 *Evento:* ${formData.tipoEvento}
+👥 *Convidados:* ${formData.numeroConvidados}
+🏛️ *Número de Andares:* ${formData.numeroAndares}
 
-🎂 *Detalhes do Bolo:*
-• Número de Andares: ${formData.numeroAndares}
-• Sabores: ${formData.sabores}
-• Recheios: ${formData.recheios}
-• Coberturas: ${formData.coberturas}
-• Decoração: ${formData.decoracao}
-• Cores: ${formData.cores}
+🍰 *Sabores por andar:*
+${formData.sabores}
 
-📝 *Observações:* ${formData.observacoes}
+🥄 *Recheios por andar:*
+${formData.recheios}
 
-Aguardo retorno para confirmar o pedido e valor. Obrigado!`;
+🍥 *Coberturas:* ${formData.coberturas}
+🌸 *Decoração:* ${formData.decoracao}
+🎨 *Cores:* ${formData.cores}
+
+📝 *Observações:* ${formData.observacoes || 'Nenhuma'}
+
+Aguardo confirmação para orçamento detalhado.`;
 
     const whatsappUrl = `https://wa.me/5524998747229?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
+  useEffect(() => {
+    // Define data mínima de entrega (1 semana a partir de hoje)
+    const hoje = new Date();
+    hoje.setDate(hoje.getDate() + 7);
+    document.getElementById('dataEntrega').min = hoje.toISOString().split('T')[0];
+  }, []);
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <Heart className="w-16 h-16 text-pink-600 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">Bolos de Andar</h1>
-          <p className="text-xl text-gray-600">
-            Bolos especiais para casamentos e grandes celebrações
-          </p>
-        </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Pedido de Bolo de Andar</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
 
-        {/* Aviso Importante */}
-        <Card className="mb-8 bg-amber-50 border-amber-200">
-          <CardContent className="p-4">
-            <div className="flex items-start space-x-3">
-              <AlertCircle className="w-6 h-6 text-amber-600 mt-0.5" />
-              <div>
-                <h4 className="font-semibold text-amber-800 mb-2">Importante!</h4>
-                <p className="text-amber-700 text-sm">
-                  Bolos de andar requerem antecedência mínima de 1 semana para produção. 
-                  Para eventos especiais como casamentos, recomendamos fazer o pedido com 2-3 semanas de antecedência.
-                </p>
-              </div>
+            {/* Nome Cliente */}
+            <div>
+              <Label>Nome do Cliente *</Label>
+              <Input value={formData.nomeCliente} onChange={(e) => handleInputChange('nomeCliente', e.target.value)} />
+              {formErrors.nomeCliente && <p className="text-red-500">{formErrors.nomeCliente}</p>}
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Informações do Pedido</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Dados do Cliente */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-800">Dados do Cliente</h3>
-                
-                <div>
-                  <Label htmlFor="nome">Nome Completo *</Label>
-                  <Input
-                    id="nome"
-                    type="text"
-                    value={formData.nome}
-                    onChange={(e) => handleInputChange('nome', e.target.value)}
-                    required
-                    placeholder="Seu nome completo"
-                  />
-                </div>
+            {/* Telefone */}
+            <div>
+              <Label>Telefone *</Label>
+              <Input value={formData.telefone} onChange={(e) => handleInputChange('telefone', e.target.value)} />
+              {formErrors.telefone && <p className="text-red-500">{formErrors.telefone}</p>}
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="telefone">WhatsApp *</Label>
-                    <Input
-                      id="telefone"
-                      type="tel"
-                      value={formData.telefone}
-                      onChange={(e) => handleInputChange('telefone', e.target.value)}
-                      required
-                      placeholder="(24) 99874-7229"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">E-mail</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      placeholder="seu@email.com"
-                    />
-                  </div>
-                </div>
+            {/* Data de Entrega */}
+            <div>
+              <Label>Data de Entrega *</Label>
+              <Input id="dataEntrega" type="date" value={formData.dataEntrega} onChange={(e) => handleInputChange('dataEntrega', e.target.value)} />
+              {formErrors.dataEntrega && <p className="text-red-500">{formErrors.dataEntrega}</p>}
+            </div>
 
-                <div>
-                  <Label htmlFor="dataEntrega">Data de Entrega *</Label>
-                  <Input
-                    id="dataEntrega"
-                    type="date"
-                    value={formData.dataEntrega}
-                    onChange={(e) => handleInputChange('dataEntrega', e.target.value)}
-                    required
-                    min={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Antecedência mínima de 1 semana
-                  </p>
-                </div>
-              </div>
+            {/* Tipo de Evento */}
+            <div>
+              <Label>Tipo de Evento *</Label>
+              <Select onValueChange={(value) => handleInputChange('tipoEvento', value)} value={formData.tipoEvento}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Escolha o tipo de evento" />
+                </SelectTrigger>
+                <SelectContent>
+                  {eventoOptions.map(evento => (
+                    <SelectItem key={evento} value={evento}>{evento}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {formErrors.tipoEvento && <p className="text-red-500">{formErrors.tipoEvento}</p>}
+            </div>
 
-              {/* Detalhes do Evento */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-800">Detalhes do Evento</h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="tipoEvento">Tipo de Evento *</Label>
-                    <Select onValueChange={(value) => handleInputChange('tipoEvento', value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione o tipo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="casamento">Casamento</SelectItem>
-                        <SelectItem value="noivado">Noivado</SelectItem>
-                        <SelectItem value="aniversario">Aniversário</SelectItem>
-                        <SelectItem value="batizado">Batizado</SelectItem>
-                        <SelectItem value="formatura">Formatura</SelectItem>
-                        <SelectItem value="outro">Outro</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+            {/* Número de Convidados */}
+            <div>
+              <Label>Número de Convidados *</Label>
+              <Input type="number" value={formData.numeroConvidados} onChange={(e) => handleInputChange('numeroConvidados', e.target.value)} />
+              {formErrors.numeroConvidados && <p className="text-red-500">{formErrors.numeroConvidados}</p>}
+            </div>
 
-                  <div>
-                    <Label htmlFor="numeroConvidados">Número de Convidados *</Label>
-                    <Input
-                      id="numeroConvidados"
-                      type="number"
-                      value={formData.numeroConvidados}
-                      onChange={(e) => handleInputChange('numeroConvidados', e.target.value)}
-                      required
-                      placeholder="Ex: 100"
-                      min="1"
-                    />
-                  </div>
-                </div>
-              </div>
+            {/* Número de Andares */}
+            <div>
+              <Label>Número de Andares *</Label>
+              <Select onValueChange={(value) => handleInputChange('numeroAndares', value)} value={formData.numeroAndares}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Escolha o número de andares" />
+                </SelectTrigger>
+                <SelectContent>
+                  {andaresOptions.map(op => (
+                    <SelectItem key={op} value={op}>{op}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {formErrors.numeroAndares && <p className="text-red-500">{formErrors.numeroAndares}</p>}
+            </div>
 
-              {/* Detalhes do Bolo */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-800">Detalhes do Bolo</h3>
-                
-                <div>
-                  <Label htmlFor="numeroAndares">Número de Andares *</Label>
-                  <Select onValueChange={(value) => handleInputChange('numeroAndares', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Escolha o número de andares" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="2">2 Andares</SelectItem>
-                      <SelectItem value="3">3 Andares</SelectItem>
-                      <SelectItem value="4">4 Andares</SelectItem>
-                      <SelectItem value="5+">5 ou mais Andares</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* Sabores */}
+            <div>
+              <Label>Sabores por andar *</Label>
+              <Textarea rows={3} value={formData.sabores} onChange={(e) => handleInputChange('sabores', e.target.value)} />
+              {formErrors.sabores && <p className="text-red-500">{formErrors.sabores}</p>}
+            </div>
 
-                <div>
-                  <Label htmlFor="sabores">Sabores (por andar) *</Label>
-                  <Textarea
-                    id="sabores"
-                    value={formData.sabores}
-                    onChange={(e) => handleInputChange('sabores', e.target.value)}
-                    required
-                    placeholder="Ex: 1º andar - Chocolate, 2º andar - Baunilha, 3º andar - Red Velvet"
-                    rows={3}
-                  />
-                </div>
+            {/* Recheios */}
+            <div>
+              <Label>Recheios por andar *</Label>
+              <Textarea rows={3} value={formData.recheios} onChange={(e) => handleInputChange('recheios', e.target.value)} />
+              {formErrors.recheios && <p className="text-red-500">{formErrors.recheios}</p>}
+            </div>
 
-                <div>
-                  <Label htmlFor="recheios">Recheios (por andar) *</Label>
-                  <Textarea
-                    id="recheios"
-                    value={formData.recheios}
-                    onChange={(e) => handleInputChange('recheios', e.target.value)}
-                    required
-                    placeholder="Ex: 1º andar - Brigadeiro, 2º andar - Doce de leite, 3º andar - Morango"
-                    rows={3}
-                  />
-                </div>
+            {/* Coberturas */}
+            <div>
+              <Label>Coberturas *</Label>
+              <Input value={formData.coberturas} onChange={(e) => handleInputChange('coberturas', e.target.value)} />
+              {formErrors.coberturas && <p className="text-red-500">{formErrors.coberturas}</p>}
+            </div>
 
-                <div>
-                  <Label htmlFor="coberturas">Coberturas *</Label>
-                  <Input
-                    id="coberturas"
-                    type="text"
-                    value={formData.coberturas}
-                    onChange={(e) => handleInputChange('coberturas', e.target.value)}
-                    required
-                    placeholder="Ex: Fondant, Chantilly, Buttercream..."
-                  />
-                </div>
+            {/* Decoração */}
+            <div>
+              <Label>Decoração *</Label>
+              <Textarea rows={3} value={formData.decoracao} onChange={(e) => handleInputChange('decoracao', e.target.value)} />
+              {formErrors.decoracao && <p className="text-red-500">{formErrors.decoracao}</p>}
+            </div>
 
-                <div>
-                  <Label htmlFor="decoracao">Decoração Desejada *</Label>
-                  <Textarea
-                    id="decoracao"
-                    value={formData.decoracao}
-                    onChange={(e) => handleInputChange('decoracao', e.target.value)}
-                    required
-                    placeholder="Descreva detalhadamente: flores, tema, estilo, elementos decorativos..."
-                    rows={4}
-                  />
-                </div>
+            {/* Cores */}
+            <div>
+              <Label>Cores Principais *</Label>
+              <Input value={formData.cores} onChange={(e) => handleInputChange('cores', e.target.value)} />
+              {formErrors.cores && <p className="text-red-500">{formErrors.cores}</p>}
+            </div>
 
-                <div>
-                  <Label htmlFor="cores">Cores Principais *</Label>
-                  <Input
-                    id="cores"
-                    type="text"
-                    value={formData.cores}
-                    onChange={(e) => handleInputChange('cores', e.target.value)}
-                    required
-                    placeholder="Ex: Branco e rosa, Azul e dourado..."
-                  />
-                </div>
+            {/* Observações */}
+            <div>
+              <Label>Observações</Label>
+              <Textarea rows={3} value={formData.observacoes} onChange={(e) => handleInputChange('observacoes', e.target.value)} />
+            </div>
 
-                <div>
-                  <Label htmlFor="observacoes">Observações Adicionais</Label>
-                  <Textarea
-                    id="observacoes"
-                    value={formData.observacoes}
-                    onChange={(e) => handleInputChange('observacoes', e.target.value)}
-                    placeholder="Inspirações, referências, alergias, preferências especiais..."
-                    rows={4}
-                  />
-                </div>
-              </div>
-
-              <Button 
-                type="submit" 
-                className="w-full bg-green-600 hover:bg-green-700"
-                size="lg"
-              >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Enviar Pedido pelo WhatsApp
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        <div className="mt-8">
-          <Card className="bg-pink-50">
-            <CardContent className="p-4">
-              <h4 className="font-semibold text-gray-800 mb-2">Informações sobre Bolos de Andar:</h4>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Preços variam conforme tamanho, decoração e complexidade</li>
-                <li>• Estrutura interna profissional para garantir estabilidade</li>
-                <li>• Possibilidade de degustação prévia (agendamento necessário)</li>
-                <li>• Entrega e montagem no local do evento disponível</li>
-                <li>• Orçamento detalhado será enviado após análise do pedido</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="mt-4 text-center">
-          <p className="text-sm text-gray-500">
-            Após enviar o pedido, entraremos em contato para agendar uma reunião e definir todos os detalhes.
-          </p>
-        </div>
-      </div>
+            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+              <MessageCircle className="w-5 h-5 mr-2" /> Enviar Pedido por WhatsApp
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
 export default OrderTieredCakes;
-
