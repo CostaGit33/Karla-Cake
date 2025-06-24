@@ -17,13 +17,14 @@ const tamanhoOptions = [
 ];
 
 const adicionalOptions = [
-  { label: "Nenhum", value: "", price: 0 },
+  { label: "Nenhum", value: "nenhum", price: 0 },
   { label: "Morango in Natura", value: "Morango in Natura", price: 10 },
   { label: "Geleia Morango", value: "Geleia Morango", price: 10 },
   { label: "Abacaxi", value: "Abacaxi", price: 10 },
   { label: "Ameixa", value: "Ameixa", price: 10 },
   { label: "Nutella", value: "Nutella", price: 10 }
 ];
+
 
 const recheioOptions = [
   { label: "Brigadeiro", value: "Brigadeiro" },
@@ -72,18 +73,30 @@ const OrderCakes = () => {
     }));
   };
 
-  useEffect(() => {
-    const selectedTamanho = tamanhoOptions.find(opt => opt.value === formData.tamanho);
-    const selectedAdicional = adicionalOptions.find(opt => opt.value === formData.adicional);
+// Calcula o valor do bolo e do adicional sempre que tamanho/adicional mudarem
+useEffect(() => {
+  const selectedTamanho = tamanhoOptions.find(opt => opt.value === formData.tamanho);
+  const selectedAdicional = adicionalOptions.find(opt => opt.value === formData.adicional);
 
-    const precoTamanho = selectedTamanho ? selectedTamanho.price : 0;
-    const precoAdicional = selectedAdicional ? selectedAdicional.price : 0;
-    const precoTotal = precoTamanho + precoAdicional;
+  const precoTamanho = selectedTamanho ? selectedTamanho.price : 0;
+  const precoAdicional = selectedAdicional ? selectedAdicional.price : 0;
 
-    setValorBolo(precoTamanho);
-    setValorAdicional(precoAdicional);
-    setValorTotal(precoTotal);
-  }, [formData.tamanho, formData.adicional]);
+  setValorBolo(precoTamanho);
+  setValorAdicional(precoAdicional);
+}, [formData.tamanho, formData.adicional]);
+
+// Recalcula o total final sempre que bolo, adicional ou entrada mudarem
+useEffect(() => {
+  const entradaNumber = parseFloat(formData.entrada);
+  let total = valorBolo + valorAdicional;
+
+  if (!isNaN(entradaNumber) && entradaNumber >= 0) {
+    total -= entradaNumber;
+  }
+
+  setValorTotal(total < 0 ? 0 : total);
+}, [valorBolo, valorAdicional, formData.entrada]);
+
 
   const validateForm = () => {
     const errors = {};
