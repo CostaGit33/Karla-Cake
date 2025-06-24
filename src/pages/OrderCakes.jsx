@@ -25,7 +25,6 @@ const adicionalOptions = [
   { label: "Nutella", value: "Nutella", price: 10 }
 ];
 
-
 const recheioOptions = [
   { label: "Brigadeiro", value: "Brigadeiro" },
   { label: "Doce de Leite", value: "Doce de Leite" },
@@ -73,30 +72,29 @@ const OrderCakes = () => {
     }));
   };
 
-// Calcula o valor do bolo e do adicional sempre que tamanho/adicional mudarem
-useEffect(() => {
-  const selectedTamanho = tamanhoOptions.find(opt => opt.value === formData.tamanho);
-  const selectedAdicional = adicionalOptions.find(opt => opt.value === formData.adicional);
+  // Calcula o valor do bolo e do adicional
+  useEffect(() => {
+    const selectedTamanho = tamanhoOptions.find(opt => opt.value === formData.tamanho);
+    const selectedAdicional = adicionalOptions.find(opt => opt.value === formData.adicional);
 
-  const precoTamanho = selectedTamanho ? selectedTamanho.price : 0;
-  const precoAdicional = selectedAdicional ? selectedAdicional.price : 0;
+    const precoTamanho = selectedTamanho ? selectedTamanho.price : 0;
+    const precoAdicional = selectedAdicional ? selectedAdicional.price : 0;
 
-  setValorBolo(precoTamanho);
-  setValorAdicional(precoAdicional);
-}, [formData.tamanho, formData.adicional]);
+    setValorBolo(precoTamanho);
+    setValorAdicional(precoAdicional);
+  }, [formData.tamanho, formData.adicional]);
 
-// Recalcula o total final sempre que bolo, adicional ou entrada mudarem
-useEffect(() => {
-  const entradaNumber = parseFloat(formData.entrada);
-  let total = valorBolo + valorAdicional;
+  // Recalcula o total considerando a entrada
+  useEffect(() => {
+    const entradaNumber = parseFloat(formData.entrada);
+    let total = valorBolo + valorAdicional;
 
-  if (!isNaN(entradaNumber) && entradaNumber >= 0) {
-    total -= entradaNumber;
-  }
+    if (!isNaN(entradaNumber) && entradaNumber >= 0) {
+      total -= entradaNumber;
+    }
 
-  setValorTotal(total < 0 ? 0 : total);
-}, [valorBolo, valorAdicional, formData.entrada]);
-
+    setValorTotal(total < 0 ? 0 : total);
+  }, [valorBolo, valorAdicional, formData.entrada]);
 
   const validateForm = () => {
     const errors = {};
@@ -120,6 +118,8 @@ useEffect(() => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    const adicionalLabel = adicionalOptions.find(opt => opt.value === formData.adicional)?.label || 'Nenhum';
+
     const message = `🧁 *PEDIDO DE BOLO - KARLA CAKE*
 
 👤 *Cliente:* ${formData.nomeCliente}
@@ -130,7 +130,7 @@ useEffect(() => {
 🎂 *Tamanho:* ${formData.tamanho}
 🍫 *Recheio 1:* ${formData.recheio1}
 🍫 *Recheio 2:* ${formData.recheio2}
-✨ *Adicional:* ${formData.adicional || 'Nenhum'}
+✨ *Adicional:* ${adicionalLabel}
 
 💵 *Valor do Bolo:* ${formatCurrency(valorBolo)}
 💵 *Valor Adicional:* ${formatCurrency(valorAdicional)}
@@ -141,7 +141,7 @@ useEffect(() => {
 
 Aguardo confirmação.`;
 
-    const whatsappUrl = `https://wa.me/5524998747229?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/5573981292670?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -153,36 +153,42 @@ Aguardo confirmação.`;
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Nome */}
             <div>
               <Label>Nome do Cliente *</Label>
               <Input value={formData.nomeCliente} onChange={(e) => handleInputChange('nomeCliente', e.target.value)} />
               {formErrors.nomeCliente && <p className="text-red-500">{formErrors.nomeCliente}</p>}
             </div>
 
+            {/* Telefone */}
             <div>
               <Label>Telefone *</Label>
               <Input value={formData.telefone} onChange={(e) => handleInputChange('telefone', e.target.value)} />
               {formErrors.telefone && <p className="text-red-500">{formErrors.telefone}</p>}
             </div>
 
+            {/* Entrada */}
             <div>
               <Label>Entrada (R$) *</Label>
               <Input type="number" value={formData.entrada} onChange={(e) => handleInputChange('entrada', e.target.value)} />
               {formErrors.entrada && <p className="text-red-500">{formErrors.entrada}</p>}
             </div>
 
+            {/* Data de Entrega */}
             <div>
               <Label>Data de Entrega *</Label>
               <Input type="date" value={formData.dataEntrega} onChange={(e) => handleInputChange('dataEntrega', e.target.value)} />
               {formErrors.dataEntrega && <p className="text-red-500">{formErrors.dataEntrega}</p>}
             </div>
 
+            {/* Arte/Tema */}
             <div>
               <Label>Arte/Tema *</Label>
               <Input value={formData.arte} onChange={(e) => handleInputChange('arte', e.target.value)} />
               {formErrors.arte && <p className="text-red-500">{formErrors.arte}</p>}
             </div>
 
+            {/* Tamanho */}
             <div>
               <Label>Tamanho *</Label>
               <Select onValueChange={(value) => handleInputChange('tamanho', value)} value={formData.tamanho}>
@@ -198,6 +204,7 @@ Aguardo confirmação.`;
               {formErrors.tamanho && <p className="text-red-500">{formErrors.tamanho}</p>}
             </div>
 
+            {/* Recheio 1 */}
             <div>
               <Label>Recheio 1 *</Label>
               <Select onValueChange={(value) => handleInputChange('recheio1', value)} value={formData.recheio1}>
@@ -213,6 +220,7 @@ Aguardo confirmação.`;
               {formErrors.recheio1 && <p className="text-red-500">{formErrors.recheio1}</p>}
             </div>
 
+            {/* Recheio 2 */}
             <div>
               <Label>Recheio 2 *</Label>
               <Select onValueChange={(value) => handleInputChange('recheio2', value)} value={formData.recheio2}>
@@ -228,6 +236,7 @@ Aguardo confirmação.`;
               {formErrors.recheio2 && <p className="text-red-500">{formErrors.recheio2}</p>}
             </div>
 
+            {/* Adicional */}
             <div>
               <Label>Adicional</Label>
               <Select onValueChange={(value) => handleInputChange('adicional', value)} value={formData.adicional}>
@@ -242,11 +251,13 @@ Aguardo confirmação.`;
               </Select>
             </div>
 
+            {/* Observações */}
             <div>
               <Label>Observações</Label>
               <Textarea rows={3} value={formData.observacoes} onChange={(e) => handleInputChange('observacoes', e.target.value)} />
             </div>
 
+            {/* Resumo de Preços */}
             <div className="border-t pt-4">
               <p><strong>Valor Bolo:</strong> {formatCurrency(valorBolo)}</p>
               <p><strong>Adicional:</strong> {formatCurrency(valorAdicional)}</p>
