@@ -9,12 +9,11 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 export default defineConfig({
-  base: '/Karla-Cake/',  // <--- ATENÇÃO AQUI
+  base: '/Karla-Cake/',  // <-- ESSENCIAL PARA GITHUB PAGES
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 })
-// https://vitejs.dev/config/

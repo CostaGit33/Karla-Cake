@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Cake, MessageCircle } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 
 const tamanhoOptions = [
   { label: "10cm - R$75,00", value: "10cm", price: 75 },
@@ -72,7 +72,6 @@ const OrderCakes = () => {
     }));
   };
 
-  // Calcula o valor do bolo e do adicional
   useEffect(() => {
     const selectedTamanho = tamanhoOptions.find(opt => opt.value === formData.tamanho);
     const selectedAdicional = adicionalOptions.find(opt => opt.value === formData.adicional);
@@ -84,7 +83,6 @@ const OrderCakes = () => {
     setValorAdicional(precoAdicional);
   }, [formData.tamanho, formData.adicional]);
 
-  // Recalcula o total considerando a entrada
   useEffect(() => {
     const entradaNumber = parseFloat(formData.entrada);
     let total = valorBolo + valorAdicional;
@@ -153,6 +151,7 @@ Aguardo confirmação.`;
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+
             {/* Nome */}
             <div>
               <Label>Nome do Cliente *</Label>
@@ -195,7 +194,7 @@ Aguardo confirmação.`;
                 <SelectTrigger>
                   <SelectValue placeholder="Escolha o tamanho" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" forceMount>
                   {tamanhoOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                   ))}
@@ -211,7 +210,7 @@ Aguardo confirmação.`;
                 <SelectTrigger>
                   <SelectValue placeholder="Escolha o recheio 1" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" forceMount>
                   {recheioOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                   ))}
@@ -227,7 +226,7 @@ Aguardo confirmação.`;
                 <SelectTrigger>
                   <SelectValue placeholder="Escolha o recheio 2" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" forceMount>
                   {recheioOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                   ))}
@@ -243,7 +242,7 @@ Aguardo confirmação.`;
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione adicional" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" forceMount>
                   {adicionalOptions.map(option => (
                     <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
                   ))}
@@ -257,7 +256,7 @@ Aguardo confirmação.`;
               <Textarea rows={3} value={formData.observacoes} onChange={(e) => handleInputChange('observacoes', e.target.value)} />
             </div>
 
-            {/* Resumo de Preços */}
+            {/* Resumo */}
             <div className="border-t pt-4">
               <p><strong>Valor Bolo:</strong> {formatCurrency(valorBolo)}</p>
               <p><strong>Adicional:</strong> {formatCurrency(valorAdicional)}</p>
@@ -267,6 +266,7 @@ Aguardo confirmação.`;
             <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
               <MessageCircle className="w-5 h-5 mr-2" /> Enviar Pedido por WhatsApp
             </Button>
+
           </form>
         </CardContent>
       </Card>
